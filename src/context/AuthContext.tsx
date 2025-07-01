@@ -218,7 +218,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setUser(null);
       // Force page reload to ensure clean state
-      window.location.href = "/login";
+      window.location.href = "/kizunavi/login";
     }
   };
 
