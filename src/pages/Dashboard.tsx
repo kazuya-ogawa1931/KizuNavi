@@ -3,21 +3,22 @@ import { THEME_COLORS, type DashboardMetrics, type ChartData } from "../types";
 import { useAuth } from "../context/AuthContext";
 import ReportService from "../utils/reportService";
 
-// Simple chart data types for dashboard display
-interface SimpleChartItem {
-  name?: string;
-  category?: string;
-  age?: string;
-  tenure?: string;
-  score: number;
-}
+// TODO: Use SimpleChartItem interface when needed
+// interface SimpleChartItem {
+//   name?: string;
+//   category?: string;
+//   age?: string;
+//   tenure?: string;
+//   score: number;
+// }
 
-interface DashboardChartData {
-  departmentKizuna: SimpleChartItem[];
-  categoryKizuna: SimpleChartItem[];
-  generationKizuna: SimpleChartItem[];
-  tenureKizuna: SimpleChartItem[];
-}
+// TODO: Use DashboardChartData interface when needed
+// interface DashboardChartData {
+//   departmentKizuna: SimpleChartItem[];
+//   categoryKizuna: SimpleChartItem[];
+//   generationKizuna: SimpleChartItem[];
+//   tenureKizuna: SimpleChartItem[];
+// }
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();

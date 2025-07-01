@@ -1,5 +1,5 @@
 import { apiClient } from './api';
-import type { Company, Employee } from '../types';
+import type { Company } from '../types';
 
 // Company registration types
 export interface CompanyRegistrationData {

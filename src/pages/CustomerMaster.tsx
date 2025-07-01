@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+// import { useAuth } from "../context/AuthContext"; // TODO: Use when authentication is needed
 import type { Company, Employee } from "../types";
 import { THEME_COLORS } from "../types";
 import CompanyService, {
@@ -7,7 +7,7 @@ import CompanyService, {
 } from "../utils/companyService";
 
 const CustomerMaster: React.FC = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth(); // TODO: Use user context when needed
   const [companyData, setCompanyData] = useState<Partial<Company>>({
     name: "",
     nameKana: "",
@@ -106,24 +106,26 @@ const CustomerMaster: React.FC = () => {
     }));
   };
 
-  const addSalesPerson = () => {
-    if ((companyData.salesPersonIds?.length || 0) < 4) {
-      setCompanyData((prev) => ({
-        ...prev,
-        salesPersonIds: [...(prev.salesPersonIds || []), ""],
-      }));
-    }
-  };
+  // TODO: Implement add sales person functionality
+  // const addSalesPerson = () => {
+  //   if ((companyData.salesPersonIds?.length || 0) < 4) {
+  //     setCompanyData((prev) => ({
+  //       ...prev,
+  //       salesPersonIds: [...(prev.salesPersonIds || []), ""],
+  //     }));
+  //   }
+  // };
 
-  const removeSalesPerson = (index: number) => {
-    if ((companyData.salesPersonIds?.length || 0) > 1) {
-      setCompanyData((prev) => ({
-        ...prev,
-        salesPersonIds:
-          prev.salesPersonIds?.filter((_, i) => i !== index) || [],
-      }));
-    }
-  };
+  // TODO: Implement remove sales person functionality
+  // const removeSalesPerson = (index: number) => {
+  //   if ((companyData.salesPersonIds?.length || 0) > 1) {
+  //     setCompanyData((prev) => ({
+  //       ...prev,
+  //       salesPersonIds:
+  //         prev.salesPersonIds?.filter((_, i) => i !== index) || [],
+  //     }));
+  //   }
+  // };
 
   const handleEmployeeChange = (
     index: number,

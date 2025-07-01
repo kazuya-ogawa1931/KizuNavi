@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+// import { useLocation } from "react-router-dom"; // TODO: Use when location is needed
 import { useAuth } from "../context/AuthContext";
 import { useQuestions } from "../context/QuestionsContext";
-import type { Answer, Survey, SurveyResponse } from "../types";
+import type { Answer, Survey } from "../types";
 import { THEME_COLORS } from "../types";
 
 const SurveyResponsePage: React.FC = () => {
   const { token } = useParams<{ token?: string }>();
-  const location = useLocation();
+  // const location = useLocation(); // TODO: Use location when needed
   const { user, logout } = useAuth();
   const { questions } = useQuestions();
 
