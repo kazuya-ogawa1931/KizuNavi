@@ -34,21 +34,17 @@ const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route
-        path="/kizunavi/login"
+        path="/login"
         element={
-          isAuthenticated ? (
-            <Navigate to="/kizunavi/dashboard" replace />
-          ) : (
-            <Login />
-          )
+          isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />
         }
       />
       <Route
-        path="/kizunavi/password-reset-confirm"
+        path="/password-reset-confirm"
         element={<PasswordResetConfirm />}
       />
       <Route
-        path="/kizunavi/survey-response"
+        path="/survey-response"
         element={
           <ProtectedRoute>
             <SurveyResponse />
@@ -57,7 +53,7 @@ const AppRoutes: React.FC = () => {
       />
       <Route path="/survey-response/:token" element={<SurveyResponse />} />
       <Route
-        path="/kizunavi/dashboard"
+        path="/dashboard"
         element={
           <ProtectedRoute>
             <Layout>
@@ -67,7 +63,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/kizunavi/customer-master"
+        path="/customer-master"
         element={
           <ProtectedRoute>
             <Layout>
@@ -77,7 +73,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/kizunavi/survey-settings"
+        path="/survey-settings"
         element={
           <ProtectedRoute>
             <Layout>
@@ -87,7 +83,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/kizunavi/questions"
+        path="/questions"
         element={
           <ProtectedRoute>
             <Layout>
@@ -97,7 +93,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/kizunavi/reports"
+        path="/reports"
         element={
           <ProtectedRoute>
             <Layout>
@@ -107,7 +103,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/kizunavi/summary-report"
+        path="/summary-report"
         element={
           <ProtectedRoute>
             <Layout>
@@ -117,7 +113,7 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/kizunavi/category-report"
+        path="/category-report"
         element={
           <ProtectedRoute>
             <Layout>
@@ -126,10 +122,7 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/kizunavi/"
-        element={<Navigate to="/kizunavi/dashboard" replace />}
-      />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 };
@@ -139,7 +132,7 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <QuestionsProvider>
-        <Router>
+        <Router basename="/kizunavi">
           <div className="App">
             <AppRoutes />
           </div>
