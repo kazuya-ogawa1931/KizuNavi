@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import type { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navigation from "./Navigation";
 import Header from "./Header";
 import { THEME_COLORS } from "../types";
 
 interface LayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -16,7 +16,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   if (!isAuthenticated) {
-    return <>{children}</>;
+    navigate("/login");
+    return null;
   }
 
   const handleMenuToggle = () => {
@@ -44,16 +45,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       )}
 
       {/* Main Content */}
-      <main
-        className={`pt-16 ${!isOnlyMember ? "pb-20 lg:pb-6 lg:ml-64" : "pb-6"}`}
-      >
+      <main className={`pt-16 ${!isOnlyMember ? "pb-6 lg:ml-64" : "pb-6"}`}>
         <div className="p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div className="max-w-7xl mx-auto">{children || <Outlet />}</div>
         </div>
       </main>
 
       {/* Role-specific overlay for restricted access */}
-      {isOnlyMember && window.location.pathname !== "/survey-response" && (
+      {isOnlyMember && window.location.pathname !== "/survey" && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div
             className="bg-white rounded-lg p-6 m-4 max-w-md text-center"
@@ -87,7 +86,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               メンバー権限ではアンケート回答のみ利用可能です。
             </p>
             <button
-              onClick={() => navigate("/survey-response")}
+              onClick={() => navigate("/survey")}
               className="w-full text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
               style={{ backgroundColor: THEME_COLORS.accent }}
             >

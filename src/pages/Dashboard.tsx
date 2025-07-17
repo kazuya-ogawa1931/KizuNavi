@@ -399,8 +399,9 @@ const Dashboard: React.FC = () => {
               {/* Data area */}
               <path
                 d={pathData}
-                fill={`${THEME_COLORS.charts.radar}40`}
-                stroke={THEME_COLORS.charts.radar}
+                fill="#71D3D8"
+                fillOpacity="0.3"
+                stroke="#71D3D8"
                 strokeWidth="2"
               />
 
@@ -411,7 +412,7 @@ const Dashboard: React.FC = () => {
                     cx={point.x}
                     cy={point.y}
                     r="4"
-                    fill={THEME_COLORS.charts.radar}
+                    fill="#71D3D8"
                     className="hover:r-6 cursor-pointer"
                   >
                     <title>{`${point.label}: ${point.score.toFixed(1)}`}</title>

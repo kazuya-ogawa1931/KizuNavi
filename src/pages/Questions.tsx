@@ -258,9 +258,10 @@ const Questions: React.FC = () => {
                         <div className="mt-3">
                           <button
                             onClick={() => handleEditAnnotation(question.id)}
-                            className="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded hover:bg-gray-200"
+                            className="px-3 py-1 text-xs font-medium text-white rounded transition-colors hover:opacity-90 flex-shrink-0"
+                            style={{ backgroundColor: THEME_COLORS.accent }}
                           >
-                            注釈を追加
+                            + 注釈を追加
                           </button>
                         </div>
                       )}

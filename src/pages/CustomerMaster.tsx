@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // import { useAuth } from "../context/AuthContext"; // TODO: Use when authentication is needed
-import type { Company, Employee } from "../types";
+import type { Company } from "../types";
 import { THEME_COLORS } from "../types";
 import CompanyService, {
   type CompanyRegistrationData,
@@ -22,64 +22,9 @@ const CustomerMaster: React.FC = () => {
     salesPersonIds: [""],
   });
 
-  const [employeeCount, setEmployeeCount] = useState(1);
-  const [employees, setEmployees] = useState<Partial<Employee>[]>([
-    {
-      email: "",
-      name: "",
-      department: "",
-      gender: "",
-      nationality: "",
-      age: "",
-      tenure: "",
-      jobType: "",
-      position: "",
-      grade: "",
-      evaluation: "",
-      location: "",
-      employmentType: "",
-      recruitmentType: "",
-      education: "",
-      idType: "employee",
-    },
-  ]);
-
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
-  // 従業員数の変更に応じて従業員リストを調整
-  useEffect(() => {
-    const currentLength = employees.length;
-    if (employeeCount > currentLength) {
-      // 従業員を追加
-      const newEmployees = [...employees];
-      for (let i = currentLength; i < employeeCount; i++) {
-        newEmployees.push({
-          email: "",
-          name: "",
-          department: "",
-          gender: "",
-          nationality: "",
-          age: "",
-          tenure: "",
-          jobType: "",
-          position: "",
-          grade: "",
-          evaluation: "",
-          location: "",
-          employmentType: "",
-          recruitmentType: "",
-          education: "",
-          idType: "employee",
-        });
-      }
-      setEmployees(newEmployees);
-    } else if (employeeCount < currentLength) {
-      // 従業員を削除
-      setEmployees(employees.slice(0, employeeCount));
-    }
-  }, [employeeCount]);
 
   const handleCompanyChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -89,13 +34,6 @@ const CustomerMaster: React.FC = () => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const handleEmployeeCountChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const count = Math.max(1, parseInt(e.target.value) || 1);
-    setEmployeeCount(count);
   };
 
   const handleSalesPersonChange = (index: number, value: string) => {
@@ -127,18 +65,6 @@ const CustomerMaster: React.FC = () => {
   //   }
   // };
 
-  const handleEmployeeChange = (
-    index: number,
-    field: string,
-    value: string
-  ) => {
-    setEmployees((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -165,25 +91,8 @@ const CustomerMaster: React.FC = () => {
         paymentCycle: companyData.paymentCycle || "",
         salesPersonIds:
           companyData.salesPersonIds?.filter((id) => id.trim() !== "") || [],
-        employeeCount,
-        employees: employees.map((emp) => ({
-          email: emp.email || "",
-          name: emp.name || "",
-          department: emp.department || "",
-          gender: emp.gender || "",
-          nationality: emp.nationality || "",
-          age: emp.age || "",
-          tenure: emp.tenure || "",
-          jobType: emp.jobType || "",
-          position: emp.position || "",
-          grade: emp.grade || "",
-          evaluation: emp.evaluation || "",
-          location: emp.location || "",
-          employmentType: emp.employmentType || "",
-          recruitmentType: emp.recruitmentType || "",
-          education: emp.education || "",
-          idType: (emp.idType as "hr" | "employee") || "employee",
-        })),
+        employeeCount: 0,
+        employees: [],
       };
 
       await CompanyService.createCompany(registrationData);
@@ -203,27 +112,6 @@ const CustomerMaster: React.FC = () => {
         paymentCycle: "",
         salesPersonIds: [""],
       });
-      setEmployeeCount(1);
-      setEmployees([
-        {
-          email: "",
-          name: "",
-          department: "",
-          gender: "",
-          nationality: "",
-          age: "",
-          tenure: "",
-          jobType: "",
-          position: "",
-          grade: "",
-          evaluation: "",
-          location: "",
-          employmentType: "",
-          recruitmentType: "",
-          education: "",
-          idType: "employee",
-        },
-      ]);
     } catch (err) {
       setError(
         err instanceof Error
@@ -238,9 +126,9 @@ const CustomerMaster: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">顧客情報登録</h1>
+        <h1 className="text-3xl font-bold text-gray-900">基本情報登録</h1>
         <p className="mt-2 text-sm text-gray-600">
-          企業の基本情報と従業員情報を登録してください
+          企業の基本情報と契約情報を登録してください
         </p>
       </div>
 
@@ -291,27 +179,6 @@ const CustomerMaster: React.FC = () => {
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 style={{ borderColor: THEME_COLORS.border }}
                 placeholder="カブシキガイシャ○○"
-                required
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="employeeCount"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                従業員数{" "}
-                <span style={{ color: THEME_COLORS.status.error }}>*</span>
-              </label>
-              <input
-                type="number"
-                id="employeeCount"
-                value={employeeCount}
-                onChange={handleEmployeeCountChange}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                style={{ borderColor: THEME_COLORS.border }}
-                min="1"
-                placeholder="50"
                 required
               />
             </div>
@@ -518,362 +385,6 @@ const CustomerMaster: React.FC = () => {
                 required
               />
             </div>
-          </div>
-        </div>
-
-        {/* 従業員情報 */}
-        <div
-          className="bg-white rounded-lg shadow-sm p-6"
-          style={{ borderColor: THEME_COLORS.border, borderWidth: "1px" }}
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2 sm:mb-0">
-              従業員情報
-            </h2>
-          </div>
-
-          <div className="space-y-6">
-            {employees.map((employee, index) => (
-              <div
-                key={index}
-                className="border rounded-lg p-4"
-                style={{ borderColor: THEME_COLORS.border }}
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-sm font-medium text-gray-700">
-                    従業員 {index + 1}
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {/* 基本情報 */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      氏名{" "}
-                      <span style={{ color: THEME_COLORS.status.error }}>
-                        *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      value={employee.name || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "name", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="山田太郎"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      メールアドレス{" "}
-                      <span style={{ color: THEME_COLORS.status.error }}>
-                        *
-                      </span>
-                    </label>
-                    <input
-                      type="email"
-                      value={employee.email || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "email", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="yamada@company.com"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      所属部門{" "}
-                      <span style={{ color: THEME_COLORS.status.error }}>
-                        *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      value={employee.department || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(
-                          index,
-                          "department",
-                          e.target.value
-                        )
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="営業部"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      性別
-                    </label>
-                    <select
-                      value={employee.gender || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "gender", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="male">男性</option>
-                      <option value="female">女性</option>
-                      <option value="other">その他</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      国籍
-                    </label>
-                    <input
-                      type="text"
-                      value={employee.nationality || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(
-                          index,
-                          "nationality",
-                          e.target.value
-                        )
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="日本"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      年代
-                    </label>
-                    <select
-                      value={employee.age || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "age", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="10s">10代</option>
-                      <option value="20s">20代</option>
-                      <option value="30s">30代</option>
-                      <option value="40s">40代</option>
-                      <option value="50s">50代</option>
-                      <option value="60s">60代</option>
-                      <option value="70s">70代～</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      勤続年数
-                    </label>
-                    <select
-                      value={employee.tenure || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "tenure", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="less-than-3">3年未満</option>
-                      <option value="3-7">3-7年</option>
-                      <option value="8-13">8-13年</option>
-                      <option value="14-20">14-20年</option>
-                      <option value="20-plus">20年以上</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      職種
-                    </label>
-                    <input
-                      type="text"
-                      value={employee.jobType || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "jobType", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="営業"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      職位
-                    </label>
-                    <input
-                      type="text"
-                      value={employee.position || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "position", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="主任"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      等級
-                    </label>
-                    <input
-                      type="text"
-                      value={employee.grade || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "grade", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="3級"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      人事評価
-                    </label>
-                    <select
-                      value={employee.evaluation || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(
-                          index,
-                          "evaluation",
-                          e.target.value
-                        )
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="S">S</option>
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      勤務地
-                    </label>
-                    <input
-                      type="text"
-                      value={employee.location || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "location", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      placeholder="東京本社"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      雇用形態
-                    </label>
-                    <select
-                      value={employee.employmentType || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(
-                          index,
-                          "employmentType",
-                          e.target.value
-                        )
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="regular">正社員</option>
-                      <option value="contract">契約社員</option>
-                      <option value="part-time">パート・アルバイト</option>
-                      <option value="temporary">派遣社員</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      採用区分
-                    </label>
-                    <select
-                      value={employee.recruitmentType || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(
-                          index,
-                          "recruitmentType",
-                          e.target.value
-                        )
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="new-graduate">新卒</option>
-                      <option value="mid-career">中途</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      最終学歴
-                    </label>
-                    <select
-                      value={employee.education || ""}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "education", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                    >
-                      <option value="">選択してください</option>
-                      <option value="high-school">高等学校</option>
-                      <option value="vocational">専門学校</option>
-                      <option value="college">短期大学</option>
-                      <option value="university">大学</option>
-                      <option value="graduate">大学院</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      ID種別{" "}
-                      <span style={{ color: THEME_COLORS.status.error }}>
-                        *
-                      </span>
-                    </label>
-                    <select
-                      value={employee.idType || "employee"}
-                      onChange={(e) =>
-                        handleEmployeeChange(index, "idType", e.target.value)
-                      }
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      style={{ borderColor: THEME_COLORS.border }}
-                      required
-                    >
-                      <option value="sales">営業ID（マスタ権限）</option>
-                      <option value="hr">人事ID（アドミン権限）</option>
-                      <option value="employee">従業員ID（メンバー権限）</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 

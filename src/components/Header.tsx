@@ -160,23 +160,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
               onClick={() => setShowUserMenu(!showUserMenu)}
               className="flex items-center space-x-2 p-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors duration-200"
             >
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: `${THEME_COLORS.main}20` }}
-              >
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: THEME_COLORS.accent }}
-                >
-                  {user?.email?.charAt(0).toUpperCase()}
-                </span>
-              </div>
               <div className="hidden sm:block text-left">
                 <div className="text-sm font-medium text-gray-900">
                   {user?.email}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {getRoleDisplayName(user?.role || "")}
                 </div>
               </div>
               <svg
